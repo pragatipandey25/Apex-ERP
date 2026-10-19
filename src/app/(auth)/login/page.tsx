@@ -65,9 +65,19 @@ export default function LoginPage() {
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-6 shadow-xl rounded-lg sm:px-10 border border-slate-200">
           {error && (
-            <div className="mb-4 bg-red-50 border-l-4 border-red-500 p-3 rounded flex items-start gap-3">
-              <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
-              <p className="text-sm text-red-700">{error}</p>
+            <div className="mb-4 bg-red-50 border-l-4 border-red-500 p-3.5 rounded text-sm text-red-800 space-y-2">
+              <div className="flex items-start gap-2.5">
+                <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
+                <span className="font-semibold">{error}</span>
+              </div>
+              {error.includes("Database connection") && (
+                <div className="mt-2 pt-2 border-t border-red-200 text-xs text-red-700 space-y-1">
+                  <p className="font-bold">How to resolve:</p>
+                  <p>1. Start your local MySQL server (XAMPP, Windows Service, or Docker on port 3306).</p>
+                  <p>2. Push the database schema: <code className="bg-red-100 px-1 py-0.5 rounded font-mono">npx prisma db push</code></p>
+                  <p>3. Seed demo users: <code className="bg-red-100 px-1 py-0.5 rounded font-mono">npm run seed</code></p>
+                </div>
+              )}
             </div>
           )}
 

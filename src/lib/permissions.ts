@@ -51,6 +51,22 @@ export function handleApiError(error: unknown) {
     );
   }
 
+  const errObj = error as any;
+  if (
+    errObj?.code === "P1001" ||
+    errObj?.message?.includes("Can't reach database server") ||
+    errObj?.message?.includes("connect ECONNREFUSED")
+  ) {
+    return NextResponse.json(
+      {
+        success: false,
+        error:
+          "Database connection error: Cannot reach MySQL server at localhost:3306. Please ensure MySQL is running, or verify DATABASE_URL in .env.",
+      },
+      { status: 503 }
+    );
+  }
+
   if (error instanceof Error) {
     return NextResponse.json(
       { success: false, error: error.message },

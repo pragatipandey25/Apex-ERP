@@ -76,10 +76,40 @@ export async function POST(req: NextRequest) {
         role: user.role,
       },
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Login error:", error);
+
+    // Provide clear, actionable diagnostics if database server is unreachable
+    if (
+      error?.code === "P1001" ||
+      error?.message?.includes("Can't reach database server") ||
+      error?.message?.includes("connect ECONNREFUSED")
+    ) {
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            "Database connection failed: Cannot reach MySQL server at localhost:3306. Please ensure MySQL is running, or configure DATABASE_URL in your .env file.",
+          dbError: true,
+        },
+        { status: 503 }
+      );
+    }
+
+    if (error?.code === "P2021" || error?.message?.includes("does not exist")) {
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            "Database schema not initialized: Tables do not exist. Please run 'npx prisma db push && npm run seed'.",
+          dbError: true,
+        },
+        { status: 503 }
+      );
+    }
+
     return NextResponse.json(
-      { success: false, error: "An unexpected error occurred during login." },
+      { success: false, error: error?.message || "An unexpected error occurred during login." },
       { status: 500 }
     );
   }

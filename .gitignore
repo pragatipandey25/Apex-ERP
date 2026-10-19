@@ -18,6 +18,8 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .system_generated/
+*.db
+*.db-journal
 
 # OS files
 .DS_Store
