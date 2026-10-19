@@ -1,0 +1,321 @@
+// Prisma Schema for Tape Factory Stock Management System
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  STAFF
+  ADMIN
+}
+
+enum MaterialType {
+  FILM
+  LIQUID_ADHESIVE
+  CORE
+}
+
+enum MaterialMovementType {
+  RECEIPT
+  PRODUCTION_ISSUE
+  DAMAGE
+  CORRECTION_ADJUSTMENT
+}
+
+enum FinishedMovementType {
+  PRODUCTION_RECEIPT
+  ORDER_DISPATCH
+  CORRECTION_ADJUSTMENT
+}
+
+enum OrderUnit {
+  ROLLS
+  METRES
+  NET_KG
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PARTIALLY_DISPATCHED
+  FULFILLED
+  CANCELLED
+}
+
+enum ReservationStatus {
+  ACTIVE
+  RELEASED
+  FULFILLED
+}
+
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  name         String
+  passwordHash String
+  role         Role      @default(STAFF)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  sessions                   Session[]
+  productionBatches          ProductionBatch[]
+  materialMovements          MaterialInventoryMovement[]
+  finishedMovements          FinishedGoodsMovement[]
+  customerOrders             CustomerOrder[]
+  dispatches                 Dispatch[]
+  corrections                TransactionCorrection[]     @relation("AdminCorrections")
+  auditLogs                  AuditLog[]
+
+  @@map("users")
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@map("sessions")
+}
+
+model TapeSpecification {
+  id                     String   @id @default(cuid())
+  code                   String   @unique
+  name                   String
+  widthMm                Decimal  @db.Decimal(8, 2)
+  filmGsm                Decimal  @db.Decimal(8, 2)
+  dryAdhesiveGsm         Decimal  @db.Decimal(8, 2)
+  adhesiveSolidsPercent  Decimal  @db.Decimal(5, 2)
+  rollLengthM            Decimal  @db.Decimal(10, 2)
+  isUsedInProduction     Boolean  @default(false)
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+
+  productionBatches      ProductionBatch[]
+  finishedMovements      FinishedGoodsMovement[]
+  customerOrders         CustomerOrder[]
+  dispatches             Dispatch[]
+  stockReservations      StockReservation[]
+
+  @@map("tape_specifications")
+}
+
+model Customer {
+  id            String   @id @default(cuid())
+  code          String   @unique
+  name          String
+  contactPerson String?
+  email         String?
+  phone         String?
+  address       String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  orders        CustomerOrder[]
+
+  @@map("customers")
+}
+
+model ProductionBatch {
+  id                     String            @id @default(cuid())
+  batchNumber            String            @unique
+  productionDate         DateTime
+  specificationId        String
+  specification          TapeSpecification @relation(fields: [specificationId], references: [id])
+  wholeRolls             Int
+  filmIssuedKg           Decimal           @db.Decimal(12, 3)
+  liquidAdhesiveIssuedKg Decimal           @db.Decimal(12, 3)
+  dryWastageKg           Decimal           @db.Decimal(12, 3)
+  theoreticalNetTapeKg   Decimal           @db.Decimal(12, 3)
+  balanceDifferenceKg    Decimal           @db.Decimal(12, 4)
+  notes                  String?           @db.Text
+  idempotencyKey         String?           @unique
+  userId                 String
+  user                   User              @relation(fields: [userId], references: [id])
+  createdAt              DateTime          @default(now())
+
+  materialMovements      MaterialInventoryMovement[]
+  finishedMovements      FinishedGoodsMovement[]
+
+  @@index([specificationId])
+  @@index([userId])
+  @@map("production_batches")
+}
+
+model MaterialInventoryMovement {
+  id              String               @id @default(cuid())
+  referenceNumber String               @unique
+  materialType    MaterialType
+  movementType    MaterialMovementType
+  quantity        Decimal              @db.Decimal(12, 3) // Positive for in, negative for out
+  unit            String               // "kg" or "pieces"
+  batchId         String?
+  batch           ProductionBatch?     @relation(fields: [batchId], references: [id], onDelete: SetNull)
+  reason          String?
+  notes           String?              @db.Text
+  userId          String
+  user            User                 @relation(fields: [userId], references: [id])
+  createdAt       DateTime             @default(now())
+
+  @@index([materialType, movementType])
+  @@index([batchId])
+  @@index([userId])
+  @@map("material_inventory_movements")
+}
+
+model FinishedGoodsMovement {
+  id              String               @id @default(cuid())
+  referenceNumber String               @unique
+  specificationId String
+  specification   TapeSpecification    @relation(fields: [specificationId], references: [id])
+  batchId         String?
+  batch           ProductionBatch?     @relation(fields: [batchId], references: [id], onDelete: SetNull)
+  movementType    FinishedMovementType
+  wholeRolls      Int                  // Positive for receipt, negative for dispatch/adjustment
+  netTapeKg       Decimal              @db.Decimal(12, 3)
+  rollLengthM     Decimal              @db.Decimal(10, 2)
+  totalMetres     Decimal              @db.Decimal(12, 2)
+  orderId         String?
+  order           CustomerOrder?       @relation(fields: [orderId], references: [id], onDelete: SetNull)
+  dispatchId      String?
+  dispatch        Dispatch?            @relation(fields: [dispatchId], references: [id], onDelete: SetNull)
+  reason          String?
+  notes           String?              @db.Text
+  userId          String
+  user            User                 @relation(fields: [userId], references: [id])
+  createdAt       DateTime             @default(now())
+
+  @@index([specificationId])
+  @@index([batchId])
+  @@index([orderId])
+  @@index([dispatchId])
+  @@map("finished_goods_movements")
+}
+
+model CustomerOrder {
+  id                String            @id @default(cuid())
+  orderNumber       String            @unique
+  customerId        String
+  customer          Customer          @relation(fields: [customerId], references: [id])
+  specificationId   String
+  specification     TapeSpecification @relation(fields: [specificationId], references: [id])
+  requestedQuantity Decimal           @db.Decimal(12, 3)
+  requestedUnit     OrderUnit
+  wholeRolls        Int
+  totalMetres       Decimal           @db.Decimal(12, 2)
+  totalNetKg        Decimal           @db.Decimal(12, 3)
+  status            OrderStatus       @default(PENDING)
+  orderDate         DateTime
+  notes             String?           @db.Text
+  userId            String
+  user              User              @relation(fields: [userId], references: [id])
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+
+  reservations      StockReservation[]
+  dispatches        Dispatch[]
+  finishedMovements FinishedGoodsMovement[]
+
+  @@index([customerId])
+  @@index([specificationId])
+  @@index([status])
+  @@map("customer_orders")
+}
+
+model StockReservation {
+  id              String            @id @default(cuid())
+  referenceNumber String            @unique
+  orderId         String
+  order           CustomerOrder     @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  specificationId String
+  specification   TapeSpecification @relation(fields: [specificationId], references: [id])
+  reservedRolls   Int
+  status          ReservationStatus @default(ACTIVE)
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  @@index([orderId])
+  @@index([specificationId])
+  @@index([status])
+  @@map("stock_reservations")
+}
+
+model Dispatch {
+  id                   String            @id @default(cuid())
+  dispatchNumber       String            @unique
+  orderId              String
+  order                CustomerOrder     @relation(fields: [orderId], references: [id])
+  specificationId      String
+  specification        TapeSpecification @relation(fields: [specificationId], references: [id])
+  wholeRollsDispatched Int
+  dispatchedMetres     Decimal           @db.Decimal(12, 2)
+  dispatchedNetKg      Decimal           @db.Decimal(12, 3)
+  notes                String?           @db.Text
+  userId               String
+  user                 User              @relation(fields: [userId], references: [id])
+  createdAt            DateTime          @default(now())
+
+  finishedMovements    FinishedGoodsMovement[]
+
+  @@index([orderId])
+  @@index([specificationId])
+  @@index([userId])
+  @@map("dispatches")
+}
+
+model TransactionCorrection {
+  id                          String   @id @default(cuid())
+  correctionReference         String   @unique
+  originalTransactionReference String
+  transactionType             String   // "MATERIAL_MOVEMENT" | "FINISHED_MOVEMENT" | "BATCH" | "DISPATCH"
+  beforePayload               String   @db.Text
+  afterPayload                String   @db.Text
+  deltaSummary                String   @db.Text
+  reason                      String   @db.Text
+  adminUserId                 String
+  adminUser                   User     @relation("AdminCorrections", fields: [adminUserId], references: [id])
+  createdAt                   DateTime @default(now())
+
+  @@index([originalTransactionReference])
+  @@index([adminUserId])
+  @@map("transaction_corrections")
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  entityType String
+  entityId   String
+  action     String
+  details    String   @db.Text
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  ipAddress  String?
+  createdAt  DateTime @default(now())
+
+  @@index([entityType, entityId])
+  @@index([userId])
+  @@map("audit_logs")
+}
+
+model IdempotencyRecord {
+  id           String   @id @default(cuid())
+  key          String   @unique
+  endpoint     String
+  responseCode Int
+  responseBody String   @db.Text
+  createdAt    DateTime @default(now())
+  expiresAt    DateTime
+
+  @@index([key])
+  @@index([expiresAt])
+  @@map("idempotency_records")
+}
