@@ -1,16 +1,14 @@
-::: {align="center"}
+<div align="center">
 
 # Apex Tape Factory ERP
 
-### Manufacturing Inventory • Production Planning • Order Fulfilment
+### Manufacturing Inventory · Production Planning · Order Fulfilment
 
-A full-stack ERP application for managing tape specifications, raw
-materials, production batches, finished goods, customer orders,
-dispatches, and audited inventory corrections.
+A full-stack ERP application for managing tape specifications, raw materials, production batches, finished goods, customer orders, dispatches, and audited inventory corrections.
 
 **Built with Next.js · TypeScript · Prisma · MySQL**
 
-`<br/>`{=html}
+<br/>
 
 ![Next.js](https://img.shields.io/badge/Next.js-14-black?logo=next.js)
 ![TypeScript](https://img.shields.io/badge/TypeScript-Strict-blue?logo=typescript)
@@ -18,10 +16,9 @@ dispatches, and audited inventory corrections.
 ![Prisma](https://img.shields.io/badge/Prisma-5.22-2D3748?logo=prisma)
 ![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?logo=mysql)
 ![Tests](https://img.shields.io/badge/Tests-70%20passing-success)
-![License](https://img.shields.io/badge/Status-Academic%20Project-orange)
-:::
+![Status](https://img.shields.io/badge/Status-Academic%20Project-orange)
 
----
+## </div>
 
 ## Project Owner
 
@@ -207,7 +204,7 @@ material requirements. Let:
 **1. Area per roll**
 
 \[ `\text{area}`{=tex}_{m\^2} =
-`\frac{\text{width}_{mm}}{1000}`{=tex}`\times `{=tex}`\text{roll length}`{=tex}_{m}
+`\frac{\text{width}_{mm}}{1000}`{=tex}`\times `{=tex}`\text{roll length}`{=tex}\_{m}
 \]
 
 **2. Film consumption**
@@ -439,8 +436,8 @@ Role Email Password
 
 ---
 
-Admin `admin@apexdemo.local` `Admin@12345`
-Staff `staff@apexdemo.local` `Staff@12345`
+Admin `admin@apexdemo.local` `Admin@ApexTape2026!`
+Staff `staff@apexdemo.local` `Staff@ApexTape2026!`
 
 These credentials only work if they match the current seed script and
 database. If login fails, inspect the seed script and reseed only a safe
@@ -521,8 +518,12 @@ repository tree as the source of truth.
 
 ---
 
-::: {align="center"}
-**Apex Tape Factory ERP**\
-_Bringing material traceability, production control, and order
-fulfilment into one workflow._
-:::
+<div align="center">
+
+# Apex Tape Factory ERP
+
+_Bringing material traceability, production control, and order fulfilment into one workflow._
+
+**Created and maintained by Pragati Pandey**
+
+</div>
