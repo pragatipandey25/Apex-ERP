@@ -8,7 +8,7 @@ A full-stack ERP application for managing tape specifications, raw materials, pr
 
 **Built with Next.js · TypeScript · Prisma · MySQL**
 
-<br/>
+<br />
 
 ![Next.js](https://img.shields.io/badge/Next.js-14-black?logo=next.js)
 ![TypeScript](https://img.shields.io/badge/TypeScript-Strict-blue?logo=typescript)
@@ -18,7 +18,7 @@ A full-stack ERP application for managing tape specifications, raw materials, pr
 ![Tests](https://img.shields.io/badge/Tests-70%20passing-success)
 ![Status](https://img.shields.io/badge/Status-Academic%20Project-orange)
 
-## </div>
+</div>
 
 ## Project Owner
 
@@ -40,8 +40,7 @@ Specialization: Cybersecurity
 - [Technology Stack](#technology-stack)
 - [System Workflow](#system-workflow)
 - [Manufacturing Calculations](#manufacturing-calculations)
-- [Inventory and Transaction
-  Design](#inventory-and-transaction-design)
+- [Inventory and Transaction Design](#inventory-and-transaction-design)
 - [Roles and Security](#roles-and-security)
 - [Database Overview](#database-overview)
 - [Getting Started](#getting-started)
@@ -52,122 +51,47 @@ Specialization: Cybersecurity
 
 ## Overview
 
-Apex Tape Factory ERP is a manufacturing-focused inventory and order
-management application designed around the operational flow of an
-industrial tape factory.
+Apex Tape Factory ERP is a manufacturing-focused inventory and order management application designed around the operational flow of an industrial tape factory.
 
-Instead of treating inventory as a manually edited number, the system
-records stock changes as ledger movements. It connects raw-material
-receipts and issues to production, tracks finished rolls, reserves stock
-for customer orders, records dispatches, and preserves an audit trail
-for administrative corrections.
+Instead of treating inventory as a manually edited number, the system records stock changes as ledger movements. It connects raw-material receipts and issues to production, tracks finished rolls, reserves stock for customer orders, records dispatches, and preserves an audit trail for administrative corrections.
 
 ### What problem does it solve?
 
-Tape manufacturing involves linked quantities: roll width and length
-determine area; area and GSM determine film and adhesive consumption;
-adhesive solids determine the liquid adhesive quantity to issue.
-Finished rolls then move through available stock, reservations,
-dispatch, and order fulfilment.
+Tape manufacturing involves linked quantities: roll width and length determine area; area and GSM determine film and adhesive consumption; adhesive solids determine the liquid adhesive quantity to issue. Finished rolls then move through available stock, reservations, dispatch, and order fulfilment.
 
-This application brings those calculations and operational steps into
-one workflow, with server-side validation and transactional inventory
-updates intended to prevent negative stock and duplicate processing.
+This application brings those calculations and operational steps into one workflow, with server-side validation and transactional inventory updates intended to prevent negative stock and duplicate processing.
 
 ## Core Features
 
----
-
-Module Capabilities
-
----
-
-**Authentication and RBAC** Session-based authentication,
-bcrypt password hashing, and
-separate `ADMIN` and `STAFF`
-permissions
-
-**Tape Specifications** Create and manage width, film GSM,
-dry adhesive GSM, solids
-percentage, and roll length; lock
-specifications after production use
-
-**BOM Calculator** Calculate area, film consumption,
-dry and liquid adhesive, net tape
-weight, and core requirements
-
-**Raw Material Inventory** Ledger-based receipts, damage
-deductions, and production issues
-for film, liquid adhesive, and
-cardboard cores
-
-**Production Batches** Validate material availability and
-production mass balance; record
-material issues and finished-roll
-receipts transactionally
-
-**Finished Goods** Track physical, reserved,
-dispatched, and available rolls,
-with metre and net-weight
-conversions
-
-**Customer Orders** Accept quantities in rolls, metres,
-or net kilograms and validate
-whole-roll requirements
-
-**Stock Reservations** Reserve available finished goods
-when orders are confirmed
-
-**Dispatches** Support partial and full
-dispatches, update stock, and
-progress order status
-
-**Order Cancellation** Release unfulfilled reservations
-without reversing already
-dispatched goods
-
-**Admin Corrections** Record compensating ledger
-adjustments with reasons and user
-attribution rather than silently
-deleting history
-
-**Audit History and Dashboard** Review operational movements,
-inventory indicators, order
-activity, and audit events
-
----
+| Module                          | Capabilities                                                                                                                       |
+| ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| **Authentication and RBAC**     | Session-based authentication, bcrypt password hashing, and separate `ADMIN` and `STAFF` permissions.                               |
+| **Tape Specifications**         | Create and manage width, film GSM, dry adhesive GSM, solids percentage, and roll length; lock specifications after production use. |
+| **BOM Calculator**              | Calculate area, film consumption, dry and liquid adhesive, net tape weight, and core requirements.                                 |
+| **Raw Material Inventory**      | Ledger-based receipts, damage deductions, and production issues for film, liquid adhesive, and cardboard cores.                    |
+| **Production Batches**          | Validate material availability and production mass balance; record material issues and finished-roll receipts transactionally.     |
+| **Finished Goods**              | Track physical, reserved, dispatched, and available rolls, with metre and net-weight conversions.                                  |
+| **Customer Orders**             | Accept quantities in rolls, metres, or net kilograms and validate whole-roll requirements.                                         |
+| **Stock Reservations**          | Reserve available finished goods when orders are confirmed.                                                                        |
+| **Dispatches**                  | Support partial and full dispatches, update stock, and progress order status.                                                      |
+| **Order Cancellation**          | Release unfulfilled reservations without reversing already dispatched goods.                                                       |
+| **Admin Corrections**           | Record compensating ledger adjustments with reasons and user attribution rather than silently deleting history.                    |
+| **Audit History and Dashboard** | Review operational movements, inventory indicators, order activity, and audit events.                                              |
 
 ## Technology Stack
 
----
-
-Layer Technologies
-
----
-
-Application framework Next.js 14 App Router
-
-UI React 18, TypeScript, Tailwind CSS,
-Lucide icons
-
-API Next.js Route Handlers
-
-Database MySQL
-
-ORM Prisma 5.22
-
-Decimal arithmetic Decimal.js
-
-Validation Zod
-
-Authentication bcrypt.js, server-managed sessions,
-HttpOnly cookies
-
-Testing Vitest
-
-Package manager npm
-
----
+| Layer                 | Technologies                                         |
+| --------------------- | ---------------------------------------------------- |
+| Application framework | Next.js 14 App Router                                |
+| UI                    | React 18, TypeScript, Tailwind CSS, Lucide icons     |
+| API                   | Next.js Route Handlers                               |
+| Database              | MySQL                                                |
+| ORM                   | Prisma 5.22                                          |
+| Decimal arithmetic    | Decimal.js                                           |
+| Validation            | Zod                                                  |
+| Authentication        | bcrypt.js, server-managed sessions, HttpOnly cookies |
+| Testing               | Vitest                                               |
+| Package manager       | npm                                                  |
 
 ## System Workflow
 
@@ -190,8 +114,7 @@ flowchart TD
 
 ## Manufacturing Calculations
 
-The BOM calculator uses the tape specification to calculate expected
-material requirements. Let:
+The BOM calculator uses the tape specification to calculate expected material requirements. Let:
 
 - `width_mm` = tape width in millimetres
 - `roll_length_m` = roll length in metres
@@ -203,121 +126,104 @@ material requirements. Let:
 
 **1. Area per roll**
 
-\[ `\text{area}`{=tex}_{m\^2} =
-`\frac{\text{width}_{mm}}{1000}`{=tex}`\times `{=tex}`\text{roll length}`{=tex}\_{m}
-\]
+$$
+\text{Area}_{m^2} = \frac{\text{width}_{mm}}{1000} \times \text{roll length}_{m}
+$$
 
 **2. Film consumption**
 
-\[ `\text{film}`{=tex}\_{kg} =
-`\frac{\text{area}_{m^2}\times \text{film GSM}}{1000}`{=tex} \]
+$$
+\text{Film}_{kg} = \frac{\text{Area}_{m^2} \times \text{Film GSM}}{1000}
+$$
 
 **3. Dry adhesive weight**
 
-\[ `\text{dry adhesive}`{=tex}\_{kg} =
-`\frac{\text{area}_{m^2}\times \text{dry adhesive GSM}}{1000}`{=tex} \]
+$$
+\text{Dry adhesive}_{kg} = \frac{\text{Area}_{m^2} \times \text{Dry adhesive GSM}}{1000}
+$$
 
 **4. Liquid adhesive consumption**
 
-\[ `\text{liquid adhesive}`{=tex}\_{kg} =
-`\frac{\text{dry adhesive}_{kg}}{\text{solids percentage}/100}`{=tex} \]
+$$
+\text{Liquid adhesive}_{kg} = \frac{\text{Dry adhesive}_{kg}}{\text{Solids percentage}/100}
+$$
 
 **5. Net tape weight**
 
-\[ `\text{net tape}`{=tex}_{kg} = `\text{film}`{=tex}_{kg} +
-`\text{dry adhesive}`{=tex}\_{kg} \]
+$$
+\text{Net tape}_{kg} = \text{Film}_{kg} + \text{Dry adhesive}_{kg}
+$$
 
 **6. Cardboard cores**
 
-\[ `\text{cores required}`{=tex} = `\text{whole rolls produced}`{=tex}
-\]
+$$
+\text{Cores required} = \text{Whole rolls produced}
+$$
 
 ### Example specification
 
-Parameter Value
-
----
-
-Width 48 mm
-Film GSM 25 g/m²
-Dry adhesive GSM 22 g/m²
-Adhesive solids 50%
-Roll length 1,000 m
+| Parameter        |   Value |
+| ---------------- | ------: |
+| Width            |   48 mm |
+| Film GSM         | 25 g/m² |
+| Dry adhesive GSM | 22 g/m² |
+| Adhesive solids  |     50% |
+| Roll length      | 1,000 m |
 
 Expected results per roll:
 
-Output Result
-
----
-
-Area 48.000 m²
-Film 1.200 kg
-Dry adhesive 1.056 kg
-Liquid adhesive 2.112 kg
-Net tape weight 2.256 kg
-Cardboard cores 1 piece
+| Output          |    Result |
+| --------------- | --------: |
+| Area            | 48.000 m² |
+| Film            |  1.200 kg |
+| Dry adhesive    |  1.056 kg |
+| Liquid adhesive |  2.112 kg |
+| Net tape weight |  2.256 kg |
+| Cardboard cores |   1 piece |
 
 ### Production mass balance
 
-The system checks the solids balance between materials issued and
-finished tape plus recorded dry wastage:
+The system checks the solids balance between materials issued and finished tape plus recorded dry wastage:
 
-\[
-
-```{=tex}
+$$
 \begin{aligned}
-&\text{film issued}_{kg} + \\
-&(\text{liquid adhesive issued}_{kg}\times\text{solids fraction}) \\
-&= \text{net tape produced}_{kg}+\text{dry wastage}_{kg}
+&\text{Film issued}_{kg} \\
+&+ (\text{Liquid adhesive issued}_{kg} \times \text{Solids fraction}) \\
+&= \text{Net tape produced}_{kg} + \text{Dry wastage}_{kg}
 \end{aligned}
-```
+$$
 
-\]
-
-The configured tolerance and rejection behaviour are enforced by the
-production validation logic. Check the current implementation before
-changing calibration assumptions for a real factory.
+The configured tolerance and rejection behaviour are enforced by the production validation logic. Check the current implementation before changing calibration assumptions for a real factory.
 
 ## Inventory and Transaction Design
 
 ### Ledger-based stock
 
-Inventory is represented through recorded movements instead of relying
-only on a manually editable balance. The application records receipts,
-production issues, damage, finished-goods receipts, dispatches, and
-correction adjustments.
+Inventory is represented through recorded movements instead of relying only on a manually editable balance. The application records receipts, production issues, damage, finished-goods receipts, dispatches, and correction adjustments.
 
 ### Finished-goods availability
 
 The intended availability calculation is:
 
-\[ `\text{Available rolls}`{=tex} = `\text{Physical rolls}`{=tex} -
-`\text{Active reserved rolls}`{=tex} \]
+$$
+\text{Available rolls} = \text{Physical rolls} - \text{Active reserved rolls}
+$$
 
 ### Transaction safety
 
-Inventory-changing operations use database transactions so related
-changes can succeed or fail together. The project also includes
-concurrency tests for competing reservations and production requests,
-and idempotency support to help protect against duplicate processing on
-retries.
+Inventory-changing operations use database transactions so related changes can succeed or fail together. The project also includes concurrency tests for competing reservations and production requests, and idempotency support to help protect against duplicate processing on retries.
 
-> **Engineering note:** Automated tests are evidence for the scenarios
-> they cover, not a guarantee of correctness under every deployment or
-> workload. Review database locking, transaction isolation, and all
-> stock-changing paths before production use.
+> **Engineering note:** Automated tests are evidence for the scenarios they cover, not a guarantee of correctness under every deployment or workload. Review database locking, transaction isolation, and all stock-changing paths before production use.
 
 ## Roles and Security
 
-Capability Admin Staff
-
----
-
-Standard operational workflows Yes Yes
-Receive and manage inventory Yes Yes
-Production and order workflows Yes Yes
-Dispatch orders Yes Yes
-Perform audited inventory corrections Yes No
+| Capability                            | Admin | Staff |
+| ------------------------------------- | :---: | :---: |
+| Standard operational workflows        |  Yes  |  Yes  |
+| Receive and manage inventory          |  Yes  |  Yes  |
+| Production and order workflows        |  Yes  |  Yes  |
+| Dispatch orders                       |  Yes  |  Yes  |
+| Perform audited inventory corrections |  Yes  |  No   |
 
 Security measures implemented in the project include:
 
@@ -346,8 +252,7 @@ The Prisma schema models the main business entities, including:
 - `audit_logs`
 - `idempotency_records`
 
-For the authoritative field names, relations, indexes, and constraints,
-refer to `prisma/schema.prisma`.
+For the authoritative field names, relations, indexes, and constraints, refer to `prisma/schema.prisma`.
 
 ## Getting Started
 
@@ -360,18 +265,14 @@ refer to `prisma/schema.prisma`.
 ### 1. Clone the repository
 
 ```bash
-git clone <your-repository-url>
-cd apex-erp
+git clone https://github.com/pragatipandey25/Apex-ERP.git
+cd Apex-ERP
 npm install
 ```
 
-Replace `<your-repository-url>` with the URL of your own repository.
-
 ### 2. Configure environment variables
 
-Create a local `.env` file using `.env.example` as a template, if the
-project includes one. Configure your own database connection and session
-secret. For example:
+Create a local `.env` file using `.env.example` as a template, if the project includes one. Configure your own database connection and session secret. For example:
 
 ```env
 DATABASE_URL="mysql://USER:PASSWORD@localhost:3306/apex_tape_factory"
@@ -380,13 +281,11 @@ NODE_ENV="development"
 PORT=3000
 ```
 
-Use a URL-encoded password if it contains special characters. Never
-commit `.env` or real credentials to version control.
+Use a URL-encoded password if it contains special characters. Never commit `.env` or real credentials to version control.
 
 ### 3. Prepare the database
 
-After confirming that `DATABASE_URL` points to the intended
-**development database**, run:
+After confirming that `DATABASE_URL` points to the intended **development database**, run:
 
 ```bash
 npx prisma generate
@@ -394,9 +293,7 @@ npx prisma db push
 npm run seed
 ```
 
-The seed script is expected to create demo users, sample specifications,
-and customers. Confirm the script's behaviour before running it against
-any database containing data you need to preserve.
+The seed script is expected to create demo users, sample specifications, and customers. Confirm the script's behaviour before running it against any database containing data you need to preserve.
 
 ### 4. Run the tests
 
@@ -429,20 +326,14 @@ npm start
 
 ## Demo Accounts
 
-For the local seeded demo, the credentials previously used for this
-project are:
+Use these credentials for the local seeded demo, provided the seed script creates these accounts:
 
-Role Email Password
+| Role  | Email                  | Password              |
+| ----- | ---------------------- | --------------------- |
+| Admin | `admin@apexdemo.local` | `Admin@ApexTape2026!` |
+| Staff | `staff@apexdemo.local` | `Staff@ApexTape2026!` |
 
----
-
-Admin `admin@apexdemo.local` `Admin@ApexTape2026!`
-Staff `staff@apexdemo.local` `Staff@ApexTape2026!`
-
-These credentials only work if they match the current seed script and
-database. If login fails, inspect the seed script and reseed only a safe
-development database. Change demo credentials before any public
-deployment, and never use these credentials in production.
+These credentials only work if they match the current seed script and database. If login fails, inspect the seed script and reseed only a safe development database. Change demo credentials before any public deployment, and never use these credentials in production.
 
 ## Testing and Verification
 
@@ -460,67 +351,46 @@ The reported automated suite includes tests for:
 
 ### Latest local verification
 
----
+| Check              | Result                                                                     |
+| ------------------ | -------------------------------------------------------------------------- |
+| `npm run test`     | **70 / 70 tests passed**, 10 test files                                    |
+| `npx tsc --noEmit` | **Passed**                                                                 |
+| `npm run build`    | **Passed**; Prisma Client generated and Next.js production build completed |
 
-Check Result
-
----
-
-`npm run test` **70 / 70 tests passed**, 10 test
-files
-
-`npx tsc --noEmit` **Passed**
-
-`npm run build` **Passed**; Prisma Client generated
-and Next.js production build
-completed
-
----
-
-These results reflect the local run reported during project development.
-Re-run the commands against the current checkout to reproduce them.
+These results reflect the local run reported during project development. Re-run the commands against the current checkout to reproduce them.
 
 ## Project Structure
 
 ```text
-apex-erp/
+Apex-ERP/
 ├── prisma/
 │   └── schema.prisma
 ├── src/
-│   ├── app/                 # Pages and API route handlers
-│   ├── components/          # Reusable UI components
-│   ├── lib/                 # Shared services, validation, auth and utilities
+│   ├── app/                  # Pages and API route handlers
+│   ├── components/           # Reusable UI components
+│   ├── lib/                  # Shared services, validation, auth and utilities
 │   └── tests/                # Vitest unit, integration and workflow tests
 ├── .env.example              # Environment template, if present
 ├── package.json
 └── README.md
 ```
 
-The exact directory layout may vary slightly by branch; use the
-repository tree as the source of truth.
+The exact directory layout may vary slightly by branch; use the repository tree as the source of truth.
 
 ## Important Notes
 
-- This is an academic/assessment project and should not be treated as
-  certified manufacturing or accounting software without further
-  review.
-- The local demo starts with zero operational inventory unless the
-  current seed script says otherwise.
-- The application requires a reachable MySQL database configured
-  through environment variables.
-- Do not commit secrets, session keys, database passwords, or real
-  customer data.
-- Back up important databases before schema changes or seed
-  operations.
-- Before a public deployment, configure secure production secrets,
-  HTTPS, database access controls, logging, backups, and a
-  deployment-specific security review.
+- This is an academic/assessment project and should not be treated as certified manufacturing or accounting software without further review.
+- The local demo starts with zero operational inventory unless the current seed script says otherwise.
+- The application requires a reachable MySQL database configured through environment variables.
+- Do not commit secrets, session keys, database passwords, or real customer data.
+- Back up important databases before schema changes or seed operations.
+- Before a public deployment, configure secure production secrets, HTTPS, database access controls, logging, backups, and a deployment-specific security review.
 
 ---
 
 <div align="center">
 
-# Apex Tape Factory ERP
+### Apex Tape Factory ERP
 
 _Bringing material traceability, production control, and order fulfilment into one workflow._
 
