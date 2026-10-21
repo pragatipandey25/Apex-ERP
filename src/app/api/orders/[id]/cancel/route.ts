@@ -10,7 +10,7 @@ export async function POST(
   { params }: { params: { id: string } }
 ) {
   try {
-    const user = await authenticateUser();
+    const user = await authenticateUser(req);
     let reason: string | undefined;
 
     try {

@@ -12,7 +12,7 @@ export async function POST(
   { params }: { params: { id: string } }
 ) {
   try {
-    const user = await authenticateUser();
+    const user = await authenticateUser(req);
     const result = await confirmOrderAndReserveStock(params.id, user.id);
 
     return NextResponse.json({

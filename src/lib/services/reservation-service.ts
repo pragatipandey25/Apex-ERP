@@ -102,5 +102,7 @@ export async function confirmOrderAndReserveStock(
       order: updatedOrder,
       reservation,
     };
+  }, {
+    isolationLevel: "ReadCommitted",
   });
 }

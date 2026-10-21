@@ -26,7 +26,7 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   try {
-    const user = await authenticateUser();
+    const user = await authenticateUser(req);
     const body = await req.json();
     const validated = productionBatchSchema.parse(body);
 

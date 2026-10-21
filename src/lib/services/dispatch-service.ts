@@ -183,5 +183,7 @@ export async function executeDispatch(input: CreateDispatchInput) {
       isFullyFulfilled,
       remainingUnshippedRolls: order.wholeRolls - totalDispatchedAfterThis,
     };
+  }, {
+    isolationLevel: "ReadCommitted",
   });
 }

@@ -243,6 +243,8 @@ export async function createProductionBatch(input: CreateProductionBatchInput) {
     }
 
     return responsePayload;
+  }, {
+    isolationLevel: "ReadCommitted",
   });
 
   return result;

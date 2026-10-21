@@ -21,7 +21,7 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   try {
-    const user = await authenticateUser();
+    const user = await authenticateUser(req);
     // ENFORCE ADMIN ROLE - Staff MUST receive HTTP 403 Forbidden!
     authorizeRole(user, [Role.ADMIN]);
 

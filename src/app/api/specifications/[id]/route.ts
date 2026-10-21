@@ -95,7 +95,7 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    const user = await authenticateUser();
+    const user = await authenticateUser(req);
     const spec = await prisma.tapeSpecification.findUnique({
       where: { id: params.id },
     });
