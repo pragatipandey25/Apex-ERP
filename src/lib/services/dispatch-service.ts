@@ -30,6 +30,9 @@ export async function executeDispatch(input: CreateDispatchInput) {
   }
 
   return prisma.$transaction(async (tx) => {
+    // Acquire exclusive row lock on the customer order in MySQL to serialize concurrent dispatches
+    await tx.$queryRaw`SELECT id FROM customer_orders WHERE id = ${input.orderId} FOR UPDATE`;
+
     // 1. Fetch Order with Specification, Reservations, and Dispatches
     const order = await tx.customerOrder.findUnique({
       where: { id: input.orderId },

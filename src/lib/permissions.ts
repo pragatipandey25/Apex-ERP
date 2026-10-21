@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { getCurrentUser, SessionUser } from "./auth";
 import { Role } from "@prisma/client";
 
@@ -12,10 +12,81 @@ export class AuthError extends Error {
 }
 
 /**
+ * Validates Origin and Referer headers on state-changing requests (POST, PUT, PATCH, DELETE)
+ * with exact trusted-origin matching. Rejects cross-site requests with HTTP 403 Forbidden.
+ */
+export function validateRequestOrigin(req: NextRequest): void {
+  const method = req.method.toUpperCase();
+  if (["GET", "HEAD", "OPTIONS"].includes(method)) {
+    return; // Safe read-only methods
+  }
+
+  const origin = req.headers.get("origin");
+  const referer = req.headers.get("referer");
+  const host = req.headers.get("host") || "localhost:3000";
+
+  const trustedHosts = new Set<string>([
+    host.toLowerCase(),
+    "localhost:3000",
+    "127.0.0.1:3000",
+  ]);
+
+  if (process.env.APP_URL) {
+    try {
+      trustedHosts.add(new URL(process.env.APP_URL).host.toLowerCase());
+    } catch {}
+  }
+
+  // 1. Check Origin header if present
+  if (origin) {
+    try {
+      const originUrl = new URL(origin);
+      if (!trustedHosts.has(originUrl.host.toLowerCase())) {
+        throw new AuthError(
+          `Forbidden: Cross-site request rejected. Origin '${origin}' is not a trusted origin.`,
+          403
+        );
+      }
+      return;
+    } catch (err) {
+      if (err instanceof AuthError) throw err;
+      throw new AuthError("Forbidden: Malformed Origin header.", 403);
+    }
+  }
+
+  // 2. Check Referer header if Origin is absent
+  if (referer) {
+    try {
+      const refererUrl = new URL(referer);
+      if (!trustedHosts.has(refererUrl.host.toLowerCase())) {
+        throw new AuthError(
+          `Forbidden: Cross-site request rejected. Referer '${referer}' is not a trusted source.`,
+          403
+        );
+      }
+      return;
+    } catch (err) {
+      if (err instanceof AuthError) throw err;
+      throw new AuthError("Forbidden: Malformed Referer header.", 403);
+    }
+  }
+
+  // 3. Fallback: Check Sec-Fetch-Site if headers were stripped
+  const fetchSite = req.headers.get("sec-fetch-site");
+  if (fetchSite === "cross-site") {
+    throw new AuthError("Forbidden: Cross-site request rejected via Sec-Fetch-Site.", 403);
+  }
+}
+
+/**
  * Validates that the request has an active authenticated session.
+ * Optionally validates request origin on state-changing requests if req is supplied.
  * Throws AuthError(401) if not logged in.
  */
-export async function authenticateUser(): Promise<SessionUser> {
+export async function authenticateUser(req?: NextRequest): Promise<SessionUser> {
+  if (req) {
+    validateRequestOrigin(req);
+  }
   const user = await getCurrentUser();
   if (!user) {
     throw new AuthError("Authentication required. Please log in.", 401);

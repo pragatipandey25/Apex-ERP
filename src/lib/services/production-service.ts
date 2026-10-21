@@ -93,6 +93,9 @@ export async function createProductionBatch(input: CreateProductionBatchInput) {
       throw new Error(`Batch number '${input.batchNumber}' already exists.`);
     }
 
+    // Acquire exclusive row lock on the tape specification in MySQL to serialize concurrent batch creation
+    await tx.$queryRaw`SELECT id FROM tape_specifications WHERE id = ${input.specificationId} FOR UPDATE`;
+
     // 4. Validate Raw Material Stocks
     const filmStock = await getMaterialBalance(MaterialType.FILM, tx);
     if (filmStock.lessThan(filmIssued)) {

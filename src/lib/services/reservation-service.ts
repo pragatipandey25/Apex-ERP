@@ -54,6 +54,9 @@ export async function confirmOrderAndReserveStock(
       throw new Error("Order already has an active stock reservation.");
     }
 
+    // Acquire exclusive row lock on tape specification in MySQL to serialize concurrent reservations
+    await tx.$queryRaw`SELECT id FROM tape_specifications WHERE id = ${order.specificationId} FOR UPDATE`;
+
     // Check available finished stock for this specification inside transaction
     const availableRolls = await getAvailableRolls(order.specificationId, tx);
     if (availableRolls < order.wholeRolls) {

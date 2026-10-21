@@ -3,11 +3,14 @@ import { loginSchema } from "@/lib/validations";
 import { verifyPassword, createSession } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { checkRateLimit, recordFailedAttempt, resetRateLimit } from "@/lib/rate-limiter";
+import { validateRequestOrigin, handleApiError } from "@/lib/permissions";
 
 export const dynamic = "force-dynamic";
 
 export async function POST(req: NextRequest) {
   try {
+    validateRequestOrigin(req);
+
     const ip = req.headers.get("x-forwarded-for") || req.ip || "127.0.0.1";
     const userAgent = req.headers.get("user-agent") || undefined;
 
