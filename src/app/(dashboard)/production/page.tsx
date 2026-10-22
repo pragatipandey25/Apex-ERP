@@ -205,16 +205,16 @@ export default function ProductionPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-slate-200">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-slate-200/80">
         <div>
-          <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Production Management</h2>
-          <p className="text-sm text-slate-500">
+          <h2 className="text-xl font-bold text-slate-900 tracking-tight">Production Management</h2>
+          <p className="text-xs text-slate-500 mt-0.5">
             Coating batch execution with exact mass-balance equation validation and atomic material deductions
           </p>
         </div>
         <button
           onClick={() => setShowForm(!showForm)}
-          className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold text-slate-950 bg-amber-500 rounded hover:bg-amber-400 transition-colors shadow-sm"
+          className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors shadow-xs"
         >
           <Plus className="w-4 h-4" />
           {showForm ? "Cancel" : "Post New Production Batch"}
@@ -222,40 +222,42 @@ export default function ProductionPage() {
       </div>
 
       {error && (
-        <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded text-sm text-red-700 flex items-start gap-2">
-          <AlertCircle className="w-5 h-5 flex-shrink-0" />
+        <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded-lg text-xs text-red-700 font-medium shadow-xs flex items-start gap-2">
+          <AlertCircle className="w-4 h-4 text-red-500 flex-shrink-0 mt-0.5" />
           <span>{error}</span>
         </div>
       )}
 
       {success && (
-        <div className="bg-emerald-50 border-l-4 border-emerald-500 p-4 rounded text-sm text-emerald-800 flex items-start gap-2">
-          <CheckCircle2 className="w-5 h-5 flex-shrink-0" />
+        <div className="bg-emerald-50 border-l-4 border-emerald-500 p-4 rounded-lg text-xs text-emerald-800 font-medium shadow-xs flex items-start gap-2">
+          <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
           <span>{success}</span>
         </div>
       )}
 
       {/* Production Batch Form */}
       {showForm && (
-        <div className="bg-white rounded-lg border border-slate-300 shadow-md p-6 animate-fadeIn space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-            <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
-              <Factory className="w-5 h-5 text-amber-500" />
+        <div className="bg-white rounded-xl border border-slate-200/80 shadow-card p-6 animate-fadeIn space-y-4">
+          <div className="flex items-center justify-between pb-3.5 border-b border-slate-100">
+            <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+              <div className="w-7 h-7 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
+                <Factory className="w-4 h-4" />
+              </div>
               Production Batch Execution
             </h3>
             <button
               type="button"
               onClick={autoFillExactBOM}
               disabled={!liveBom}
-              className="inline-flex items-center gap-1.5 text-xs text-amber-700 bg-amber-100 hover:bg-amber-200 px-2.5 py-1 rounded font-semibold border border-amber-300 transition-colors"
+              className="inline-flex items-center gap-1.5 text-xs text-blue-700 bg-blue-50 hover:bg-blue-100 px-3 py-1 rounded-lg font-semibold border border-blue-200 transition-colors shadow-xs"
             >
-              <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+              <Sparkles className="w-3.5 h-3.5 text-blue-600" />
               Auto-fill Theoretical BOM Values
             </button>
           </div>
 
           <form onSubmit={handleBatchSubmit} className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               <div>
                 <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700">
                   Batch Number
@@ -265,7 +267,7 @@ export default function ProductionPage() {
                   required
                   value={batchNumber}
                   onChange={(e) => setBatchNumber(e.target.value)}
-                  className="mt-1 w-full px-3 py-2 border border-slate-300 rounded text-sm uppercase font-mono font-bold"
+                  className="mt-1.5 w-full px-3 py-2 border border-slate-200 rounded-lg text-xs uppercase font-mono font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                 />
               </div>
 
@@ -278,7 +280,7 @@ export default function ProductionPage() {
                   required
                   value={productionDate}
                   onChange={(e) => setProductionDate(e.target.value)}
-                  className="mt-1 w-full px-3 py-2 border border-slate-300 rounded text-sm"
+                  className="mt-1.5 w-full px-3 py-2 border border-slate-200 rounded-lg text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                 />
               </div>
 
@@ -289,7 +291,7 @@ export default function ProductionPage() {
                 <select
                   value={specificationId}
                   onChange={(e) => setSpecificationId(e.target.value)}
-                  className="mt-1 w-full px-3 py-2 border border-slate-300 rounded text-sm bg-white"
+                  className="mt-1.5 w-full px-3 py-2 border border-slate-200 rounded-lg text-xs bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium"
                 >
                   {specs.map((s) => (
                     <option key={s.id} value={s.id}>
@@ -300,7 +302,7 @@ export default function ProductionPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-amber-800">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-blue-900">
                   Whole Rolls Produced
                 </label>
                 <input
@@ -310,9 +312,9 @@ export default function ProductionPage() {
                   required
                   value={wholeRolls}
                   onChange={(e) => setWholeRolls(e.target.value)}
-                  className="mt-1 w-full px-3 py-2 border-2 border-amber-400 bg-amber-50/20 rounded text-sm font-mono font-bold"
+                  className="mt-1.5 w-full px-3 py-2 border-2 border-blue-500 bg-blue-50/20 rounded-lg text-xs font-mono font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500/30 transition-all"
                 />
-                <span className="text-[11px] text-slate-500 block mt-0.5">
+                <span className="text-[11px] text-slate-500 block mt-1">
                   1 Core consumed per roll ({wholeRolls || 0} cores required)
                 </span>
               </div>
@@ -329,9 +331,9 @@ export default function ProductionPage() {
                   placeholder={liveBom ? `Expected: ${liveBom.filmTotalKg}` : "0.000"}
                   value={filmIssuedKg}
                   onChange={(e) => setFilmIssuedKg(e.target.value)}
-                  className="mt-1 w-full px-3 py-2 border border-slate-300 rounded text-sm font-mono"
+                  className="mt-1.5 w-full px-3 py-2 border border-slate-200 rounded-lg text-xs font-mono text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                 />
-                <span className="text-[11px] text-slate-500 block mt-0.5">
+                <span className="text-[11px] text-slate-500 block mt-1">
                   Available in stock: {materialBalances?.filmKg || "0.000"} kg
                 </span>
               </div>
@@ -348,9 +350,9 @@ export default function ProductionPage() {
                   placeholder={liveBom ? `Expected: ${liveBom.liquidAdhesiveTotalKg}` : "0.000"}
                   value={liquidAdhesiveIssuedKg}
                   onChange={(e) => setLiquidAdhesiveIssuedKg(e.target.value)}
-                  className="mt-1 w-full px-3 py-2 border border-slate-300 rounded text-sm font-mono"
+                  className="mt-1.5 w-full px-3 py-2 border border-slate-200 rounded-lg text-xs font-mono text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                 />
-                <span className="text-[11px] text-slate-500 block mt-0.5">
+                <span className="text-[11px] text-slate-500 block mt-1">
                   Available in stock: {materialBalances?.liquidAdhesiveKg || "0.000"} kg
                 </span>
               </div>
@@ -366,14 +368,14 @@ export default function ProductionPage() {
                   required
                   value={dryWastageKg}
                   onChange={(e) => setDryWastageKg(e.target.value)}
-                  className="mt-1 w-full px-3 py-2 border border-slate-300 rounded text-sm font-mono"
+                  className="mt-1.5 w-full px-3 py-2 border border-slate-200 rounded-lg text-xs font-mono text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                 />
-                <span className="text-[11px] text-slate-500 block mt-0.5">
+                <span className="text-[11px] text-slate-500 block mt-1">
                   Dry scrap/edge trim (can be 0.000)
                 </span>
               </div>
 
-              <div className="md:col-span-2">
+              <div className="sm:col-span-2">
                 <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700">
                   Production Notes
                 </label>
@@ -382,39 +384,39 @@ export default function ProductionPage() {
                   placeholder="e.g. Line 2 morning shift, operator John"
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
-                  className="mt-1 w-full px-3 py-2 border border-slate-300 rounded text-sm"
+                  className="mt-1.5 w-full px-3 py-2 border border-slate-200 rounded-lg text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                 />
               </div>
             </div>
 
             {/* Live Production Equation Status Box */}
             <div
-              className={`p-4 rounded-lg border text-xs space-y-1.5 ${
+              className={`p-4 rounded-xl border text-xs space-y-1.5 shadow-xs ${
                 balanceStatus?.valid
-                  ? "bg-emerald-50 border-emerald-300 text-emerald-900"
-                  : "bg-red-50 border-red-300 text-red-900"
+                  ? "bg-emerald-50/80 border-emerald-200 text-emerald-950"
+                  : "bg-rose-50/80 border-rose-200 text-rose-950"
               }`}
             >
               <div className="flex items-center justify-between font-bold">
-                <span className="flex items-center gap-1.5 uppercase tracking-wider">
+                <span className="flex items-center gap-1.5 uppercase tracking-wider text-[11px]">
                   <Scale className="w-4 h-4" />
                   Mandatory Mass Balance Equation Status:{" "}
                   {balanceStatus?.valid ? "VERIFIED (BALANCED)" : "MISMATCH (REJECTED)"}
                 </span>
-                <span className="font-mono">Tolerance: ±0.002 kg</span>
+                <span className="font-mono text-[11px] text-slate-600 bg-white/70 px-2 py-0.5 rounded border border-slate-200">Tolerance: ±0.002 kg</span>
               </div>
-              <div className="font-mono pt-1">
+              <div className="font-mono pt-1 text-[11px] text-slate-700">
                 film_issued + (liquid_adhesive * solids%) = net_tape_produced + dry_wastage
               </div>
               {balanceStatus && (
-                <div className="font-mono">
+                <div className="font-mono text-[11px] text-slate-800">
                   LHS ({balanceStatus.lhs.toFixed(3)} kg) = RHS ({balanceStatus.rhs.toFixed(3)} kg)
                   {"  "}•{"  "}Signed Difference: {balanceStatus.diff > 0 ? "+" : ""}
                   {balanceStatus.diff.toFixed(4)} kg
                 </div>
               )}
               {balanceStatus?.error && (
-                <div className="font-semibold text-red-700 mt-1">{balanceStatus.error}</div>
+                <div className="font-semibold text-rose-700 mt-1">{balanceStatus.error}</div>
               )}
             </div>
 
@@ -422,14 +424,14 @@ export default function ProductionPage() {
               <button
                 type="button"
                 onClick={() => setShowForm(false)}
-                className="px-4 py-2 border border-slate-300 rounded text-xs font-semibold text-slate-700 hover:bg-slate-50"
+                className="px-4 py-2 border border-slate-200 rounded-lg text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors shadow-xs"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={submitting || (balanceStatus ? !balanceStatus.valid : false)}
-                className="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-semibold rounded text-xs inline-flex items-center gap-2 disabled:opacity-50"
+                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg text-xs inline-flex items-center gap-2 disabled:opacity-50 transition-all shadow-xs active:scale-[0.99]"
               >
                 {submitting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                 Post Batch & Deduct Inventory
@@ -440,18 +442,24 @@ export default function ProductionPage() {
       )}
 
       {/* Production History Table */}
-      <div className="bg-white rounded-lg border border-slate-200 shadow-sm overflow-hidden">
-        <div className="px-6 py-4 border-b border-slate-200 bg-slate-50 flex items-center justify-between">
-          <h3 className="text-sm font-bold text-slate-800 flex items-center gap-2">
-            <History className="w-4 h-4 text-slate-500" />
-            Historical Production Batches
-          </h3>
-          <span className="text-xs text-slate-500">{batches.length} batches committed</span>
+      <div className="bg-white rounded-xl border border-slate-200/80 shadow-card overflow-hidden">
+        <div className="px-5 py-3.5 border-b border-slate-200/80 bg-slate-50/60 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="w-7 h-7 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
+              <History className="w-4 h-4" />
+            </div>
+            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900">
+              Historical Production Batches
+            </h3>
+          </div>
+          <span className="text-xs font-semibold text-slate-500 font-mono bg-slate-100 px-2 py-0.5 rounded-full border border-slate-200">
+            {batches.length} batches
+          </span>
         </div>
 
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs min-w-[850px]">
-            <thead className="bg-slate-100 text-slate-700 uppercase tracking-wider font-semibold border-b border-slate-200">
+            <thead className="bg-slate-50/80 text-slate-600 uppercase tracking-wider font-semibold border-b border-slate-200/80 text-[11px]">
               <tr>
                 <th className="px-4 py-3">Batch #</th>
                 <th className="px-4 py-3">Specification</th>
@@ -469,43 +477,43 @@ export default function ProductionPage() {
               {loading ? (
                 <tr>
                   <td colSpan={10} className="px-4 py-8 text-center text-slate-400">
-                    <Loader2 className="w-5 h-5 animate-spin mx-auto mb-2" />
+                    <Loader2 className="w-5 h-5 animate-spin mx-auto mb-2 text-blue-600" />
                     Loading batches...
                   </td>
                 </tr>
               ) : batches.length === 0 ? (
                 <tr>
-                  <td colSpan={10} className="px-4 py-8 text-center text-slate-400">
+                  <td colSpan={10} className="px-4 py-8 text-center text-slate-400 font-medium">
                     No production batches executed yet. Receive raw materials first to begin.
                   </td>
                 </tr>
               ) : (
                 batches.map((b) => (
-                  <tr key={b.id} className="hover:bg-slate-50">
+                  <tr key={b.id} className="hover:bg-blue-50/20 transition-colors">
                     <td className="px-4 py-3 font-mono font-bold text-slate-900">{b.batchNumber}</td>
                     <td className="px-4 py-3 font-medium text-slate-800">
                       {b.specification?.code || "—"}
                     </td>
-                    <td className="px-4 py-3 font-mono font-bold text-amber-700">
+                    <td className="px-4 py-3 font-mono tabular-nums font-bold text-blue-600">
                       {b.wholeRolls} rolls
                     </td>
-                    <td className="px-4 py-3 font-mono text-slate-700">
+                    <td className="px-4 py-3 font-mono tabular-nums text-slate-700">
                       {parseFloat(b.filmIssuedKg).toFixed(3)} kg
                     </td>
-                    <td className="px-4 py-3 font-mono text-slate-700">
+                    <td className="px-4 py-3 font-mono tabular-nums text-slate-700">
                       {parseFloat(b.liquidAdhesiveIssuedKg).toFixed(3)} kg
                     </td>
-                    <td className="px-4 py-3 font-mono text-slate-700">
+                    <td className="px-4 py-3 font-mono tabular-nums text-slate-700">
                       {parseFloat(b.dryWastageKg).toFixed(3)} kg
                     </td>
-                    <td className="px-4 py-3 font-mono font-bold text-emerald-700">
+                    <td className="px-4 py-3 font-mono tabular-nums font-bold text-emerald-700">
                       {parseFloat(b.theoreticalNetTapeKg).toFixed(3)} kg
                     </td>
-                    <td className="px-4 py-3 font-mono text-slate-500">
+                    <td className="px-4 py-3 font-mono tabular-nums text-slate-500">
                       {parseFloat(b.balanceDifferenceKg).toFixed(4)} kg
                     </td>
                     <td className="px-4 py-3 text-slate-600">{b.user?.name || "System"}</td>
-                    <td className="px-4 py-3 text-slate-400">
+                    <td className="px-4 py-3 text-slate-400 font-mono text-[11px]">
                       {new Date(b.productionDate).toLocaleDateString()}
                     </td>
                   </tr>
