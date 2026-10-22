@@ -394,6 +394,6 @@ The exact directory layout may vary slightly by branch; use the repository tree 
 
 _Bringing material traceability, production control, and order fulfilment into one workflow._
 
-**Created and maintained by Pragati Pandey**
+**Created and maintained by Pragati Pandey **
 
 </div>
