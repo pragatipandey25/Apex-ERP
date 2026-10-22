@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { LogOut, UserCircle } from "lucide-react";
+import { LogOut, UserCircle, Menu } from "lucide-react";
 
 interface HeaderProps {
   user?: {
@@ -9,9 +9,10 @@ interface HeaderProps {
     email: string;
     role: string;
   } | null;
+  onMenuToggle?: () => void;
 }
 
-export function Header({ user }: HeaderProps) {
+export function Header({ user, onMenuToggle }: HeaderProps) {
   const router = useRouter();
 
   async function handleLogout() {
@@ -27,18 +28,28 @@ export function Header({ user }: HeaderProps) {
   const userInitial = user?.name ? user.name.charAt(0).toUpperCase() : "U";
 
   return (
-    <header className="h-16 bg-white/95 backdrop-blur-xs border-b border-slate-200/80 px-6 flex items-center justify-between sticky top-0 z-20 shadow-xs">
-      <div className="flex items-center gap-3">
-        <h1 className="text-base font-bold text-slate-900 tracking-tight">
+    <header className="h-16 bg-white/95 backdrop-blur-xs border-b border-slate-200/80 px-4 sm:px-6 flex items-center justify-between sticky top-0 z-20 shadow-xs">
+      <div className="flex items-center gap-2.5 min-w-0 pr-2">
+        {onMenuToggle && (
+          <button
+            type="button"
+            onClick={onMenuToggle}
+            className="lg:hidden p-2 -ml-1 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-colors flex-shrink-0"
+            aria-label="Toggle navigation menu"
+          >
+            <Menu className="w-5 h-5" />
+          </button>
+        )}
+        <h1 className="text-sm sm:text-base font-bold text-slate-900 tracking-tight truncate">
           Tape Factory Inventory & Production System
         </h1>
       </div>
 
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3 sm:gap-4 flex-shrink-0">
         {user ? (
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2.5 text-right">
-              <div className="hidden sm:block">
+          <div className="flex items-center gap-2.5 sm:gap-3">
+            <div className="flex items-center gap-2 text-right">
+              <div className="hidden md:block">
                 <p className="text-xs font-semibold text-slate-900 leading-none">{user.name}</p>
                 <p className="text-[11px] text-slate-500 mt-1">{user.email}</p>
               </div>
@@ -58,7 +69,7 @@ export function Header({ user }: HeaderProps) {
               </span>
             </div>
 
-            <div className="h-5 w-px bg-slate-200 mx-1" />
+            <div className="h-5 w-px bg-slate-200 mx-0.5 sm:mx-1" />
 
             <button
               onClick={handleLogout}

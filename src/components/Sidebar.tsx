@@ -14,13 +14,16 @@ import {
   Truck,
   History,
   ShieldAlert,
+  X,
 } from "lucide-react";
 
 interface SidebarProps {
   userRole?: string;
+  isOpen?: boolean;
+  onClose?: () => void;
 }
 
-export function Sidebar({ userRole }: SidebarProps) {
+export function Sidebar({ userRole, isOpen, onClose }: SidebarProps) {
   const pathname = usePathname();
 
   const operationsNav = [
@@ -65,6 +68,9 @@ export function Sidebar({ userRole }: SidebarProps) {
           <Link
             key={item.name}
             href={item.href}
+            onClick={() => {
+              if (onClose) onClose();
+            }}
             className={`group flex items-center gap-3 px-3 py-2 text-xs font-medium rounded-lg transition-all duration-150 ${
               isActive
                 ? "bg-blue-600/15 text-white font-semibold border border-blue-500/30 shadow-xs"
@@ -94,21 +100,34 @@ export function Sidebar({ userRole }: SidebarProps) {
     </div>
   );
 
-  return (
-    <aside className="w-64 bg-slate-900 text-slate-200 min-h-screen flex flex-col border-r border-slate-800/80 select-none">
+  const sidebarContent = (
+    <>
       {/* Brand Header */}
-      <div className="h-16 flex items-center px-5 border-b border-slate-800/80 gap-3 bg-slate-950/40">
-        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center font-bold text-white text-base shadow-xs ring-1 ring-white/10">
-          A
+      <div className="h-16 flex items-center justify-between px-5 border-b border-slate-800/80 bg-slate-950/40">
+        <div className="flex items-center gap-3 min-w-0">
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center font-bold text-white text-base shadow-xs ring-1 ring-white/10 flex-shrink-0">
+            A
+          </div>
+          <div className="min-w-0">
+            <span className="font-bold text-slate-100 tracking-wider text-sm block leading-tight truncate">
+              APEX TAPE
+            </span>
+            <span className="block text-[10px] uppercase tracking-widest text-blue-400 font-semibold leading-tight mt-0.5">
+              Factory ERP
+            </span>
+          </div>
         </div>
-        <div className="min-w-0">
-          <span className="font-bold text-slate-100 tracking-wider text-sm block leading-tight">
-            APEX TAPE
-          </span>
-          <span className="block text-[10px] uppercase tracking-widest text-blue-400 font-semibold leading-tight mt-0.5">
-            Factory ERP
-          </span>
-        </div>
+
+        {onClose && (
+          <button
+            type="button"
+            onClick={onClose}
+            className="lg:hidden p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            aria-label="Close navigation"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        )}
       </div>
 
       {/* Navigation Groups */}
@@ -134,6 +153,33 @@ export function Sidebar({ userRole }: SidebarProps) {
           </span>
         </div>
       </div>
-    </aside>
+    </>
+  );
+
+  return (
+    <>
+      {/* Desktop Static Sidebar (Visible on screens >= lg) */}
+      <aside className="hidden lg:flex w-64 bg-slate-900 text-slate-200 min-h-screen flex-col border-r border-slate-800/80 select-none flex-shrink-0">
+        {sidebarContent}
+      </aside>
+
+      {/* Mobile Drawer Backdrop */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-slate-950/70 backdrop-blur-xs lg:hidden transition-opacity duration-200"
+          onClick={onClose}
+          aria-hidden="true"
+        />
+      )}
+
+      {/* Mobile Slide-Out Drawer (Visible on screens < lg when isOpen) */}
+      <div
+        className={`fixed inset-y-0 left-0 z-50 w-72 bg-slate-900 text-slate-200 flex flex-col border-r border-slate-800 shadow-2xl transition-transform duration-200 ease-in-out lg:hidden ${
+          isOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        {sidebarContent}
+      </div>
+    </>
   );
 }
