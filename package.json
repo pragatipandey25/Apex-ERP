@@ -5,7 +5,7 @@
   "description": "Production-grade Tape Factory Stock Management System",
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate && next build",
+    "build": "prisma generate --schema=prisma/schema.prisma && next build",
     "start": "next start",
     "lint": "next lint",
     "prisma:generate": "prisma generate",
