@@ -23,16 +23,25 @@ interface SidebarProps {
 export function Sidebar({ userRole }: SidebarProps) {
   const pathname = usePathname();
 
-  const navItems = [
+  const operationsNav = [
     { name: "Dashboard", href: "/", icon: LayoutDashboard },
     { name: "Tape Specifications", href: "/specifications", icon: Layers },
     { name: "BOM Calculator", href: "/bom-calculator", icon: Calculator },
+  ];
+
+  const inventoryNav = [
     { name: "Raw Materials", href: "/inventory/raw-materials", icon: Boxes },
     { name: "Production Batches", href: "/production", icon: Factory },
     { name: "Finished Goods", href: "/inventory/finished-goods", icon: PackageCheck },
+  ];
+
+  const commercialNav = [
     { name: "Customers", href: "/customers", icon: Users },
     { name: "Orders & Reservations", href: "/orders", icon: ShoppingCart },
     { name: "Dispatches", href: "/dispatches", icon: Truck },
+  ];
+
+  const governanceNav = [
     { name: "Transaction History", href: "/history", icon: History },
     {
       name: "Admin Corrections",
@@ -42,64 +51,83 @@ export function Sidebar({ userRole }: SidebarProps) {
     },
   ];
 
+  const renderNavGroup = (title: string, items: typeof operationsNav) => (
+    <div className="space-y-1">
+      <div className="px-3 pt-3 pb-1.5 text-[10px] font-semibold uppercase tracking-wider text-slate-400/90">
+        {title}
+      </div>
+      {items.map((item) => {
+        const isActive = pathname === item.href;
+        const Icon = item.icon;
+        const isAdminItem = (item as any).adminOnly;
+
+        return (
+          <Link
+            key={item.name}
+            href={item.href}
+            className={`group flex items-center gap-3 px-3 py-2 text-xs font-medium rounded-lg transition-all duration-150 ${
+              isActive
+                ? "bg-blue-600/15 text-white font-semibold border border-blue-500/30 shadow-xs"
+                : "text-slate-300 hover:text-white hover:bg-slate-800/60"
+            }`}
+          >
+            <Icon
+              className={`w-4 h-4 transition-colors ${
+                isActive ? "text-blue-400" : "text-slate-400 group-hover:text-slate-200"
+              }`}
+            />
+            <span className="flex-1 truncate">{item.name}</span>
+            {isAdminItem && (
+              <span
+                className={`text-[9px] font-mono uppercase px-1.5 py-0.5 rounded font-semibold tracking-wider ${
+                  isActive
+                    ? "bg-red-500/20 text-red-200 border border-red-500/40"
+                    : "bg-red-950/60 text-red-300 border border-red-800/60"
+                }`}
+              >
+                Admin
+              </span>
+            )}
+          </Link>
+        );
+      })}
+    </div>
+  );
+
   return (
-    <aside className="w-64 bg-slate-900 text-slate-200 min-h-screen flex flex-col border-r border-slate-800">
-      <div className="h-16 flex items-center px-6 border-b border-slate-800 gap-3">
-        <div className="w-8 h-8 rounded bg-amber-500 flex items-center justify-center font-bold text-slate-950 text-lg">
+    <aside className="w-64 bg-slate-900 text-slate-200 min-h-screen flex flex-col border-r border-slate-800/80 select-none">
+      {/* Brand Header */}
+      <div className="h-16 flex items-center px-5 border-b border-slate-800/80 gap-3 bg-slate-950/40">
+        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center font-bold text-white text-base shadow-xs ring-1 ring-white/10">
           A
         </div>
-        <div>
-          <span className="font-bold text-white tracking-wider text-base">APEX TAPE</span>
-          <span className="block text-[10px] uppercase tracking-widest text-amber-400 font-semibold">
+        <div className="min-w-0">
+          <span className="font-bold text-slate-100 tracking-wider text-sm block leading-tight">
+            APEX TAPE
+          </span>
+          <span className="block text-[10px] uppercase tracking-widest text-blue-400 font-semibold leading-tight mt-0.5">
             Factory ERP
           </span>
         </div>
       </div>
 
-      <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
-        <div className="px-3 pb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
-          Operations
-        </div>
-        {navItems.map((item) => {
-          const isActive = pathname === item.href;
-          const Icon = item.icon;
-
-          return (
-            <Link
-              key={item.name}
-              href={item.href}
-              className={`flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md transition-colors ${
-                isActive
-                  ? "bg-amber-500 text-slate-950 font-semibold"
-                  : "text-slate-300 hover:bg-slate-800 hover:text-white"
-              }`}
-            >
-              <Icon className={`w-4 h-4 ${isActive ? "text-slate-950" : "text-slate-400"}`} />
-              <span className="flex-1">{item.name}</span>
-              {item.adminOnly && (
-                <span
-                  className={`text-[10px] px-1.5 py-0.5 rounded font-mono uppercase tracking-wider ${
-                    isActive
-                      ? "bg-slate-950 text-amber-400"
-                      : "bg-red-950 text-red-300 border border-red-800"
-                  }`}
-                >
-                  Admin
-                </span>
-              )}
-            </Link>
-          );
-        })}
+      {/* Navigation Groups */}
+      <nav className="flex-1 px-3 py-3 space-y-3 overflow-y-auto">
+        {renderNavGroup("Operations", operationsNav)}
+        {renderNavGroup("Inventory & Goods", inventoryNav)}
+        {renderNavGroup("Commercial", commercialNav)}
+        {renderNavGroup("Governance", governanceNav)}
       </nav>
 
-      <div className="p-4 border-t border-slate-800 text-xs text-slate-400">
-        <div className="flex items-center justify-between">
-          <span>Active Role:</span>
+      {/* Active Role Footer */}
+      <div className="p-3 border-t border-slate-800/80 bg-slate-950/30">
+        <div className="px-3 py-2 rounded-lg bg-slate-800/50 border border-slate-800 flex items-center justify-between text-xs">
+          <span className="text-slate-400 text-[11px] font-medium">Session Role</span>
           <span
-            className={`font-semibold px-2 py-0.5 rounded text-[11px] ${
+            className={`font-semibold px-2 py-0.5 rounded text-[10px] tracking-wide uppercase ${
               userRole === "ADMIN"
-                ? "bg-amber-400/20 text-amber-300 border border-amber-400/30"
-                : "bg-blue-400/20 text-blue-300 border border-blue-400/30"
+                ? "bg-amber-500/15 text-amber-300 border border-amber-500/30"
+                : "bg-blue-500/15 text-blue-300 border border-blue-500/30"
             }`}
           >
             {userRole || "GUEST"}

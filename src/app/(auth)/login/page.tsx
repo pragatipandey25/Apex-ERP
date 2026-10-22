@@ -49,26 +49,26 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-900 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-slate-950 flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative">
       <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
-        <div className="w-12 h-12 rounded-lg bg-amber-500 mx-auto flex items-center justify-center font-black text-slate-950 text-2xl shadow-lg">
+        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 mx-auto flex items-center justify-center font-bold text-white text-2xl shadow-card ring-1 ring-white/10">
           A
         </div>
         <h2 className="mt-4 text-2xl font-bold tracking-tight text-white">
           Apex Tape Factory ERP
         </h2>
-        <p className="mt-1 text-sm text-slate-400">
+        <p className="mt-1 text-xs text-slate-400">
           Stock Management & Production Control System
         </p>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-6 shadow-xl rounded-lg sm:px-10 border border-slate-200">
+        <div className="bg-white py-8 px-6 shadow-card rounded-xl sm:px-10 border border-slate-200/80">
           {error && (
-            <div className="mb-4 bg-red-50 border-l-4 border-red-500 p-3.5 rounded text-sm text-red-800 space-y-2">
+            <div className="mb-4 bg-red-50 border-l-4 border-red-500 p-3.5 rounded-lg text-xs text-red-800 space-y-2">
               <div className="flex items-start gap-2.5">
-                <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
-                <span className="font-semibold">{error}</span>
+                <AlertCircle className="w-4 h-4 text-red-500 flex-shrink-0 mt-0.5" />
+                <span className="font-semibold text-xs">{error}</span>
               </div>
               {error.includes("Database connection") && (
                 <div className="mt-2 pt-2 border-t border-red-200 text-xs text-red-700 space-y-1">
@@ -92,7 +92,7 @@ export default function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="staff@apexdemo.local"
-                className="mt-1 block w-full px-3 py-2 border border-slate-300 rounded-md shadow-sm text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
+                className="mt-1.5 block w-full px-3.5 py-2 border border-slate-300 rounded-lg shadow-xs text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 transition-colors"
               />
             </div>
 
@@ -106,14 +106,14 @@ export default function LoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••••••"
-                className="mt-1 block w-full px-3 py-2 border border-slate-300 rounded-md shadow-sm text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
+                className="mt-1.5 block w-full px-3.5 py-2 border border-slate-300 rounded-lg shadow-xs text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 transition-colors"
               />
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex justify-center items-center gap-2 py-2.5 px-4 border border-transparent rounded-md shadow-sm text-sm font-semibold text-slate-950 bg-amber-500 hover:bg-amber-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 disabled:opacity-50 transition-colors"
+              className="w-full flex justify-center items-center gap-2 py-2.5 px-4 border border-transparent rounded-lg shadow-xs text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 transition-colors"
             >
               {loading ? (
                 <>
@@ -129,29 +129,31 @@ export default function LoginPage() {
             </button>
           </form>
 
-          <div className="mt-6 pt-6 border-t border-slate-200">
-            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider text-center mb-3">
-              Technical Assessment Demo Logins
+          <div className="mt-6 pt-6 border-t border-slate-100">
+            <p className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider text-center mb-3">
+              Assessment Demo Quick-Fill
             </p>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 gap-2.5">
               <button
                 type="button"
                 onClick={() => fillDemo("staff")}
-                className="p-2 border border-slate-300 rounded text-left hover:bg-slate-50 transition-colors text-xs"
+                className="p-2.5 border border-slate-200 rounded-lg text-left hover:bg-slate-50 hover:border-slate-300 transition-all text-xs group"
               >
-                <span className="font-bold text-slate-800 block">Operator (Staff)</span>
-                <span className="text-slate-500 text-[11px] block">Permitted operations</span>
+                <span className="font-semibold text-slate-800 block group-hover:text-blue-600 transition-colors">
+                  Operator (Staff)
+                </span>
+                <span className="text-slate-500 text-[11px] block mt-0.5">Permitted operations</span>
               </button>
               <button
                 type="button"
                 onClick={() => fillDemo("admin")}
-                className="p-2 border border-amber-300 bg-amber-50/50 rounded text-left hover:bg-amber-100/50 transition-colors text-xs"
+                className="p-2.5 border border-amber-200/80 bg-amber-50/30 rounded-lg text-left hover:bg-amber-50/70 hover:border-amber-300 transition-all text-xs"
               >
-                <span className="font-bold text-amber-900 block flex items-center gap-1">
+                <span className="font-semibold text-amber-900 block flex items-center gap-1.5">
                   <ShieldCheck className="w-3.5 h-3.5 text-amber-600" />
                   Admin
                 </span>
-                <span className="text-amber-800 text-[11px] block">Audited corrections</span>
+                <span className="text-amber-700/80 text-[11px] block mt-0.5">Audited corrections</span>
               </button>
             </div>
           </div>
